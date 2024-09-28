@@ -1,7 +1,6 @@
 #include <windows.h>
 
-int main()
-{
+int main(){
 POINT cursor;
 	int signX = 1;
 	int signY = 1;
