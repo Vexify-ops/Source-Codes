@@ -1,3 +1,6 @@
+#include <windows.h>
+
+int main(){
 HDC hdc = GetDC(0);
 	int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
 	int signX = 1;
