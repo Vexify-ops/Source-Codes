@@ -1,0 +1,15 @@
+#include <windows.h>
+
+int main()
+{
+POINT cursor;
+	while (1) {
+		INT w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+		int X = rand() % w;
+		int Y = rand() % h;
+		SetCursorPos(X, Y);
+		HDC hdc = GetDC(0);
+		DrawIcon(hdc, X, Y, LoadCursor(0, IDC_ARROW));
+		ReleaseDC(0, hdc);
+	}
+}
