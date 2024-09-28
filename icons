@@ -1,0 +1,18 @@
+#include <windows.h>
+
+int main()
+{
+	while (1) {
+		HDC hdc = GetDC(0);
+		int x = GetSystemMetrics(SM_CXSCREEN);
+		int y = GetSystemMetrics(SM_CYSCREEN);
+		//int rrr = (rand () % 5 + 1)
+		DrawIconEx(hdc, rand() % x, rand() % y, LoadCursor(0, IDC_HAND), (rand() % 5 + 1) * GetSystemMetrics(SM_CXICON), (rand() % 5 + 1) * GetSystemMetrics(SM_CYICON), 0, NULL, DI_NORMAL);
+		DrawIconEx(hdc, rand() % x, rand() % y, LoadCursor(0, IDC_UPARROW), (rand() % 5 + 1) * GetSystemMetrics(SM_CXICON), (rand() % 5 + 1) * GetSystemMetrics(SM_CYICON), 0, NULL, DI_NORMAL);
+		DrawIconEx(hdc, rand() % x, rand() % y, LoadCursor(0, IDC_SIZEALL), (rand() % 5 + 1) * GetSystemMetrics(SM_CXICON), (rand() % 5 + 1) * GetSystemMetrics(SM_CYICON), 0, NULL, DI_NORMAL);
+		DrawIconEx(hdc, rand() % x, rand() % y, LoadCursor(0, IDC_NO), (rand() % 5 + 1) * GetSystemMetrics(SM_CXICON), (rand() % 5 + 1) * GetSystemMetrics(SM_CYICON), 0, NULL, DI_NORMAL);
+		DrawIconEx(hdc, rand() % x, rand() % y, LoadCursor(0, IDC_HELP), (rand() % 5 + 1) * GetSystemMetrics(SM_CXICON), (rand() % 5 + 1) * GetSystemMetrics(SM_CYICON), 0, NULL, DI_NORMAL);
+		ReleaseDC(0, hdc);
+		Sleep(1);
+	}
+}
