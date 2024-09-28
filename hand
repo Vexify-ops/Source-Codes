@@ -1,0 +1,13 @@
+#include <windows.h>
+
+int main() {
+        while (1) {
+		HDC hdc = GetDC(0);
+		int w = GetSystemMetrics(SM_CXSCREEN);
+		int h = GetSystemMetrics(SM_CYSCREEN);
+		BitBlt(hdc, rand() % 2, rand() % 2, w, h, hdc, rand() % 2, rand() % 2, SRCPAINT);
+		DrawIcon(hdc, rand() % w, rand() % h, LoadCursor(0, IDC_HAND));
+		Sleep(1);
+		ReleaseDC(0, hdc);
+	}
+}
