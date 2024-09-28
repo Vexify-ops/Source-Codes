@@ -1,0 +1,16 @@
+#include <windows.h>
+
+int main()
+{
+	HDC desk = GetDC(NULL);
+
+    const int sw = GetSystemMetrics(SM_CXSCREEN);
+    const int sh = GetSystemMetrics(SM_CYSCREEN);
+
+    while(true)
+    {
+		HDC desk = GetDC(NULL);
+        int a = rand() % sw, b = rand() % sh;
+        BitBlt(desk, a, b, 200, 200, desk, a + rand() % 21 - 10, b + rand() % 21 - 10, SRCCOPY);
+    }
+}
