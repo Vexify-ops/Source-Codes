@@ -14,14 +14,7 @@ POINT cursor;
 		HDC hdc = GetDC(HWND_DESKTOP);
 		int icon_x = GetSystemMetrics(SM_CXICON);
 		int icon_y = GetSystemMetrics(SM_CYICON);
-		GetCursorPos(&cursor);
-		//int X = cursor.x + rand() % 3 - 1;
-		//int Y = cursor.y + rand() % 3 - 1;
-		//int top_x = 0 + cursor.x;
-		//int top_y = 0 + cursor.y;
-		//int size = rand() % 900 +100;
-		//int bottom_x = 300 + cursor.x;
-		//int bottom_y = 300 + cursor.y;
+		GetCursorPos(&cursor)
 		x += incrementor * signX;
 		y += incrementor * signY;
 		SetCursorPos(x, y);
