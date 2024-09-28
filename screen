@@ -1,0 +1,15 @@
+#include <windows.h>
+
+int main()
+{
+while (1) {
+		HDC hdc = GetDC(HWND_DESKTOP);
+		int sw = GetSystemMetrics(SM_CXSCREEN), sh = GetSystemMetrics(SM_CYSCREEN);
+		//int a = rand() % sw, b = rand() % sh;
+		//BitBlt(hdc, rand() % 5, rand() % 5, rand() % sw, rand() % sh, hdc, rand() % 5, rand() % 5, SRCCOPY);
+		SetStretchBltMode(hdc, HALFTONE);
+		StretchBlt(hdc, rand() % 5, rand() % 5, rand() % sw, rand() % sh, hdc, rand() % 5, rand() % 5, rand() % sw, rand() % sh, SRCCOPY);
+		//BitBlt(hdc, rand() % sw, rand() % sh, 200, 200, hdc, rand() % sw + rand() % 21 - 10, rand() % sh + rand() % 21 - 10, NOTSRCCOPY);
+		ReleaseDC(0, hdc);
+	}
+}
