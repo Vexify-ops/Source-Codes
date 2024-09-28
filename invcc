@@ -1,0 +1,43 @@
+HDC hdc = GetDC(0);
+	int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
+	int signX = 1;
+	int signY = 1;
+	int signX1 = 1;
+	int signY1 = 1;
+	int incrementor = 10;
+	int x = 10;
+	int y = 10;
+	while (1) {
+		hdc = GetDC(0);
+		int top_x = 0 + x;
+		int top_y = 0 + y;
+		int bottom_x = 100 + x;
+		int bottom_y = 100 + y;
+		x += incrementor * signX;
+		y += incrementor * signY;
+		HRGN circle = CreateEllipticRgn(top_x, top_y, bottom_x, bottom_y);
+		InvertRgn(hdc, circle);
+		if (y >= GetSystemMetrics(SM_CYSCREEN))
+		{
+			signY = -1;
+		}
+
+		if (x >= GetSystemMetrics(SM_CXSCREEN))
+		{
+			signX = -1;
+		}
+
+		if (y == 0)
+		{
+			signY = 1;
+		}
+
+		if (x == 0)
+		{
+			signX = 1;
+		}
+		DeleteObject(circle);
+		ReleaseDC(0, hdc);
+		Sleep(10);
+	}
+}
