@@ -1,0 +1,52 @@
+#include <windows.h>
+
+int main()
+{
+POINT cursor;
+	int signX = 1;
+	int signY = 1;
+	int signX1 = 1;
+	int signY1 = 1;
+	int incrementor = 10;
+	int x = 10;
+	int y = 10;
+	while (1) {
+		HDC hdc = GetDC(HWND_DESKTOP);
+		int icon_x = GetSystemMetrics(SM_CXICON);
+		int icon_y = GetSystemMetrics(SM_CYICON);
+		GetCursorPos(&cursor);
+		//int X = cursor.x + rand() % 3 - 1;
+		//int Y = cursor.y + rand() % 3 - 1;
+		//int top_x = 0 + cursor.x;
+		//int top_y = 0 + cursor.y;
+		//int size = rand() % 900 +100;
+		//int bottom_x = 300 + cursor.x;
+		//int bottom_y = 300 + cursor.y;
+		x += incrementor * signX;
+		y += incrementor * signY;
+		SetCursorPos(x, y);
+		DrawIcon(hdc, cursor.x - icon_x, cursor.y - icon_y, LoadCursor(0, IDC_ARROW));
+		if (y >= GetSystemMetrics(SM_CYSCREEN))
+		{
+			signY = -1;
+		}
+
+		if (x >= GetSystemMetrics(SM_CXSCREEN))
+		{
+			signX = -1;
+		}
+
+		if (y == 0)
+		{
+			signY = 1;
+		}
+
+		if (x == 0)
+		{
+			signX = 1;
+		}
+		ReleaseDC(0, hdc);
+		Sleep(10);
+	}
+	return(1);
+}
