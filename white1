@@ -1,0 +1,25 @@
+#include <windows.h>
+
+int main()
+{
+	int w = GetSystemMetrics(SM_CXSCREEN);
+	int h = GetSystemMetrics(SM_CYSCREEN);
+
+
+	while (1)
+	{
+		HDC hdc = GetDC(0);
+		int rand_num_x = rand() % w;
+		int rand_num_y = rand() % h;
+
+		int top_x = 0 + rand_num_x; // Top Left Corner
+		int top_y = 0 + rand_num_y; // Top Right Corner
+
+		int bottom_x = 100 + rand_num_x; // Bottom Left Corner
+		int bottom_y = 100 + rand_num_y; // Bottom Right Corner
+
+		Rectangle(hdc, top_x, top_y, bottom_x, bottom_y);
+		Sleep(10);
+		ReleaseDC(0, hdc);
+	}
+}
