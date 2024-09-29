@@ -1,0 +1,19 @@
+#include <windows.h>
+
+int main()
+{
+	POINT cursor;
+	while (1) {
+		HDC hdc = GetDC(HWND_DESKTOP);
+		int icon_x = GetSystemMetrics(SM_CXICON);
+		int icon_y = GetSystemMetrics(SM_CYICON);
+		GetCursorPos(&cursor);
+		int X = cursor.x + rand() % 3 - 1;
+		int Y = cursor.y + rand() % 3 - 1;
+		SetCursorPos(X, Y);
+		DrawIcon(hdc, cursor.x - icon_x, cursor.y - icon_y, LoadIcon(NULL, IDI_ERROR));
+		ReleaseDC(0, hdc);
+		//Sleep(10);
+	}
+	return(1);
+}
