@@ -1,0 +1,8 @@
+#include <windows.h>
+
+int main()
+{
+	while(1){
+		Beep(rand() % 2555, rand() % 25);
+	}
+}
