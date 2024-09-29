@@ -1,0 +1,18 @@
+#include <windows.h>
+
+int main()
+{
+HDC hdc = GetDC(HWND_DESKTOP);
+	int X = GetSystemMetrics(SM_CXSCREEN);
+	int Y = GetSystemMetrics(SM_CYSCREEN);
+
+	while (TRUE)
+	{
+		HDC hdc = GetDC(HWND_DESKTOP);
+		int sw = GetSystemMetrics(SM_CXSCREEN);
+		int sh = GetSystemMetrics(SM_CYSCREEN);
+		BitBlt(hdc, rand() % 10, rand() % 10, sw, sh, hdc, rand() % 10, rand() % 10, SRCINVERT);
+		ReleaseDC(0, hdc);
+		if ((rand() % 100 + 1) % 67 == 0) InvalidateRect(0, 0, 0);
+	}
+}
