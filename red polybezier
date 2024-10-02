@@ -15,7 +15,7 @@ int main()
     iStack_10 = GetSystemMetrics(0);
     iStack_14 = GetSystemMetrics(1);
     do {
-        pHStack_18 = GetDC((HWND)0x0);
+        pHStack_18 = GetDC((HWND)0x0)
         PStack_34.x = rand();
         PStack_34.x = PStack_34.x % iStack_10;
         PStack_34.y = rand();
