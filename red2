@@ -1,0 +1,45 @@
+#include <windows.h>
+
+int main()
+{
+    int width = GetSystemMetrics(0), height = GetSystemMetrics(1);
+    int BounceFactorX = 1;
+    int BounceFactorY = 1;
+    int BounceFactorWidth = 1;
+    int BounceFactorHeight = 1;
+    int ShapeBounce = 10;
+    int x = 10;
+    int y = 10;
+    COLORREF red = RGB(200, 0, 0);
+    while (1) {
+        HDC hDC = GetDC(0);
+        x += ShapeBounce * BounceFactorX;
+        y += ShapeBounce * BounceFactorY;
+        int SquareLeft = 0 + x;
+        int SquareRight = 0 + y;
+        int SquareBottom = 100 + x;
+        int SquareTop = 100 + y;
+        HBRUSH ShapeFillClr = CreateSolidBrush(red);
+        SelectObject(hDC, ShapeFillClr);
+        Rectangle(hDC, SquareLeft, SquareRight, SquareBottom, SquareTop);
+        if (y >= GetSystemMetrics(SM_CYSCREEN))
+        {
+            BounceFactorY = -1;
+        }
+        if (x >= GetSystemMetrics(SM_CXSCREEN))
+        {
+            BounceFactorX = -1;
+        }
+        if (y == 0)
+        {
+            BounceFactorY = 1;
+        }
+        if (x == 0)
+        {
+            BounceFactorX = 1;
+        }
+        Sleep(10);
+        DeleteObject(ShapeFillClr);
+        ReleaseDC(0, hDC);
+    }
+}
