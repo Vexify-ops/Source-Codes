@@ -1,0 +1,38 @@
+#include <windows.h>
+
+int main()
+{
+    POINT PStack_34;
+    int iStack_2c;
+    int iStack_28;
+    int iStack_24;
+    int iStack_20;
+    HPEN pHStack_1c;
+    HDC pHStack_18;
+    int iStack_14;
+    int iStack_10;
+
+    iStack_10 = GetSystemMetrics(0);
+    iStack_14 = GetSystemMetrics(1);
+    do {
+        pHStack_18 = GetDC((HWND)0x0);
+        PStack_34.x = rand();
+        PStack_34.x = PStack_34.x % iStack_10;
+        PStack_34.y = rand();
+        PStack_34.y = PStack_34.y % iStack_14;
+        iStack_2c = rand();
+        iStack_2c = iStack_2c % iStack_10;
+        iStack_28 = rand();
+        iStack_28 = iStack_28 % iStack_14;
+        iStack_24 = rand();
+        iStack_24 = iStack_24 % iStack_10;
+        iStack_20 = rand();
+        iStack_20 = iStack_20 % iStack_14;
+        pHStack_1c = CreatePen(0, 5, 0xef);
+        SelectObject(pHStack_18, pHStack_1c);
+        PolyBezier(pHStack_18, &PStack_34, 4);
+        DeleteObject(pHStack_1c);
+        ReleaseDC((HWND)0x0, pHStack_18);
+        Sleep(4);
+    } while (true);
+}
