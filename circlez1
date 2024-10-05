@@ -1,0 +1,23 @@
+#include <windows.h>
+
+int main()
+{
+	int w = GetSystemMetrics(SM_CXSCREEN);
+	int h = GetSystemMetrics(SM_CYSCREEN);
+	POINT cursor;
+	while (1)
+	{
+		HDC hdc = GetDC(0);
+		GetCursorPos(&cursor);
+		int top_x = 0 + cursor.x;
+		int top_y = 0 + cursor.y;
+		int bottom_x = 100 + cursor.x;
+		int bottom_y = 100 + cursor.y;
+		HBRUSH brush = CreateSolidBrush(RGB(0, rand() % 255, 0));
+		SelectObject(hdc, brush);
+		Ellipse(hdc, top_x, top_y, bottom_x, bottom_y);
+		Sleep(10);
+		DeleteObject(brush);
+		ReleaseDC(0, hdc);
+	}
+}
