@@ -1,0 +1,17 @@
+#include <windows.h>
+
+int main()
+{
+HDC hdc = GetDC(0);
+	int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
+	int rx;
+	for (int i = 0;; i++) {
+		hdc = GetDC(0);
+		rx = rand() % sw;
+		int ry = rand() % sh;
+		BitBlt(hdc, 10, ry, sw, 96, hdc, 0, ry, SRCCOPY);
+		BitBlt(hdc, -10, ry, sw, -96, hdc, 0, ry, SRCCOPY);
+		Sleep(10);
+		ReleaseDC(0, hdc);
+	}
+}
