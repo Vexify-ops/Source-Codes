@@ -1,0 +1,21 @@
+#include <windows.h>
+
+int main()
+{
+	HDC hdc = GetDC(0);
+	RECT wRect;
+	POINT wPt[3];
+	while (1)
+	{
+		hdc = GetDC(0);
+		GetWindowRect(GetDesktopWindow(), &wRect);
+		wPt[0].x = wRect.left + 1;
+		wPt[0].y = wRect.top - 1;
+		wPt[1].x = wRect.right + 1;
+		wPt[1].y = wRect.top - 0;
+		wPt[2].x = wRect.left + 0;
+		wPt[2].y = wRect.bottom + 0;
+		PlgBlt(hdc, wPt, hdc, wRect.left, wRect.top, wRect.right + wRect.left, wRect.bottom + wRect.top, 0, 0, 0);
+		ReleaseDC(0, hdc);
+	}
+}
