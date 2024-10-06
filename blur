@@ -1,0 +1,56 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+	//Credits to ArTicZera and Rekto
+	HDC hdc = GetDC(NULL);
+	HDC hdcCopy = CreateCompatibleDC(hdc);
+	RECT rect;
+	POINT pt[3];
+	int w = GetSystemMetrics(0);
+	int h = GetSystemMetrics(1);
+
+	BITMAPINFO bmpi = { 0 };
+	BLENDFUNCTION blur;
+	HBITMAP bmp;
+
+	bmpi.bmiHeader.biSize = sizeof(bmpi);
+	bmpi.bmiHeader.biWidth = w;
+	bmpi.bmiHeader.biHeight = h;
+	bmpi.bmiHeader.biPlanes = 1;
+	bmpi.bmiHeader.biBitCount = 32;
+	bmpi.bmiHeader.biCompression = BI_RGB;
+
+	bmp = CreateDIBSection(hdc, &bmpi, 0, 0, NULL, 0);
+	SelectObject(hdcCopy, bmp);
+
+	blur.BlendOp = AC_SRC_OVER;
+	blur.BlendFlags = 0;
+	blur.AlphaFormat = 0;
+	blur.SourceConstantAlpha = 10;
+
+	while (1) {
+		hdc = GetDC(NULL);
+		//StretchBlt(hdcCopy, 0, 10, w, h + 20, hdc, 0, 0, w, h, SRCERASE);
+		GetWindowRect(GetDesktopWindow(), &rect);
+		int inc3 = (rand() % 700) + (GetCurrentThreadId() % 100);
+		int v = (rand() % 2) + (GetCurrentThreadId() % 3);
+		if (v == 1) inc3 = -inc3;
+		pt[0].x = rect.left + inc3;
+		pt[0].y = rect.top + inc3;
+		pt[1].x = rect.right + inc3;
+		pt[1].y = rect.top * inc3;
+		pt[2].x = rect.left + inc3;
+		pt[2].y = rect.bottom + inc3;
+		PlgBlt(hdcCopy, pt, hdc, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0, 0, 0);
+		AlphaBlend(hdc, 0, 0, w, h, hdcCopy, 0, 0, w, h, blur);
+		//Sleep(rand() % 25);
+		ReleaseDC(0, hdc);
+	}
+	return 0x00;
+}
