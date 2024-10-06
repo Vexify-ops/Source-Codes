@@ -1,0 +1,56 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+	HDC hdc = GetDC(NULL);
+	int w = GetSystemMetrics(SM_CXSCREEN);
+	int h = GetSystemMetrics(SM_CYSCREEN);
+
+
+	while (1)
+	{
+		hdc = GetDC(NULL);
+		// Create an array of TRIVERTEX structures that describe
+// positional and color values for each vertex.
+		TRIVERTEX vertex[3];
+		vertex[0].x = rand() % w;
+		vertex[0].y = rand() % h;
+		vertex[0].Red = 0xb000;
+		vertex[0].Green = 0x9000;
+		vertex[0].Blue = 0x0000;
+		vertex[0].Alpha = 0x0000;
+
+		vertex[1].x = rand() % w;
+		vertex[1].y = rand() % h;
+		vertex[1].Red = 0x9000;
+		vertex[1].Green = 0x0000;
+		vertex[1].Blue = 0x9000;
+		vertex[1].Alpha = 0x0000;
+
+		vertex[2].x = rand() % w;
+		vertex[2].y = rand() % h;
+		vertex[2].Red = 0xff00;
+		vertex[2].Green = 0xb000;
+		vertex[2].Blue = 0x0000;
+		vertex[2].Alpha = 0x0000;
+
+		// Create a GRADIENT_TRIANGLE structure that
+		// references the TRIVERTEX vertices.
+		GRADIENT_TRIANGLE gTriangle;
+		gTriangle.Vertex1 = 0;
+		gTriangle.Vertex2 = 1;
+		gTriangle.Vertex3 = 2;
+
+		// Draw a shaded triangle.
+		GradientFill(hdc, vertex, 3, &gTriangle, 1, GRADIENT_FILL_TRIANGLE);
+		ReleaseDC(0, hdc);
+		Sleep(1);
+	}
+
+	return 0x00;
+}
