@@ -1,0 +1,38 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+	HDC hdc = GetDC(0);
+	int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1), size = 100, radius = 227;
+	//SeedXorshift32(__rdtsc());
+	while (1) {
+		hdc = GetDC(0);
+		int origX1 = rand() % sw, origY1 = rand() % sh;
+		int origX2 = -20 + rand() % (sw + 20), origY2 = -20 + rand() % (sh + 20);
+		int origX3 = -30 + rand() % (sw + 30), origY3 = -30 + rand() % (sh + 30);
+		int origX4 = -20 + rand() % (sw + 20), origY4 = -20 + rand() % (sh + 20);
+		int origX5 = rand() % sw, origY5 = rand() % sh;
+		for (int angle = 0; angle < 1081; angle += 12.1) {
+			InvalidateRect(0, 0, 0);
+			int x1 = radius * cos(angle * M_PI / 180.0) + origX1, y1 = radius * sin(angle * M_PI / 180.0) + origY1;
+			int x2 = radius * cos(angle * M_PI / 180.0) + origX2, y2 = radius * sin(angle * M_PI / 180.0) + origY2;
+			int x3 = radius * cos(angle * M_PI / 180.0) + origX3, y3 = radius * sin(angle * M_PI / 180.0) + origY3;
+			int x4 = radius * cos(angle * M_PI / 180.0) + origX4, y4 = radius * sin(angle * M_PI / 180.0) + origY4;
+			int x5 = radius * cos(angle * M_PI / 180.0) + origX5, y5 = radius * sin(angle * M_PI / 180.0) + origY5;
+			if (angle < 720) size += 20; if (angle > 720) size -= 39;
+			HRGN circle1 = CreateEllipticRgn(x1, y1, x1 - size, y1 - size);
+			HRGN circle2 = CreateEllipticRgn(x2, y2, x2 - size, y2 - size);
+			HRGN circle3 = CreateEllipticRgn(x3, y3, x3 - size, y3 - size);
+			HRGN circle4 = CreateEllipticRgn(x4, y4, x4 - size, y4 - size);
+			HRGN circle5 = CreateEllipticRgn(x5, y5, x5 - size, y5 - size);
+			InvertRgn(hdc, circle1); InvertRgn(hdc, circle2); InvertRgn(hdc, circle3); InvertRgn(hdc, circle4); InvertRgn(hdc, circle5);
+			Sleep(26.4);
+		}
+		ReleaseDC(0, hdc);
+	}
+}
