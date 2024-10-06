@@ -1,0 +1,76 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+	int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+	int signX = 1;
+	int signY = 1;
+	int signX1 = 1;
+	int signY1 = 1;
+	int incrementor = 10;
+	int x = 10;
+	int y = 10;
+	while (1) {
+		HDC hdc = GetDC(0);
+		int top_x = 0 + x;
+		int top_y = 0 + y;
+		int bottom_x = 100 + x;
+		int bottom_y = 100 + y;
+		x += incrementor * signX;
+		y += incrementor * signY;
+		// Create an array of TRIVERTEX structures that describe 
+		// positional and color values for each vertex. For a rectangle, 
+		// only two vertices need to be defined: upper-left and lower-right. 
+		TRIVERTEX vertex[2];
+		vertex[0].x = top_x;
+		vertex[0].y = top_y;
+		vertex[0].Red = 0xff00;
+		vertex[0].Green = 0x9000;
+		vertex[0].Blue = 0x0000;
+		vertex[0].Alpha = 0x0000;
+
+		vertex[1].x = bottom_x;
+		vertex[1].y = bottom_y;
+		vertex[1].Red = 0x0000;
+		vertex[1].Green = 0x9000;
+		vertex[1].Blue = 0xff000;
+		vertex[1].Alpha = 0x0000;
+
+		// Create a GRADIENT_RECT structure that 
+		// references the TRIVERTEX vertices. 
+		GRADIENT_RECT gRect;
+		gRect.UpperLeft = 0;
+		gRect.LowerRight = 1;
+
+		// Draw a shaded rectangle. 
+		GradientFill(hdc, vertex, 2, &gRect, 1, GRADIENT_FILL_RECT_H);
+		//RoundRect(hdc, top_x, top_y, bottom_x, bottom_y, 50, 50);
+		if (y >= GetSystemMetrics(SM_CYSCREEN))
+		{
+			signY = -1;
+		}
+
+		if (x >= GetSystemMetrics(SM_CXSCREEN))
+		{
+			signX = -1;
+		}
+
+		if (y == 0)
+		{
+			signY = 1;
+		}
+
+		if (x == 0)
+		{
+			signX = 1;
+		}
+		Sleep(1);
+		//DeleteObject(brush);
+		ReleaseDC(0, hdc);
+	}
+}
