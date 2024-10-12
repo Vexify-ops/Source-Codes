@@ -1,0 +1,18 @@
+#include <windows.h>
+
+int main()
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1); //this effect is kinda cool //your mom kinda cool
+    while (1) {
+        desk = GetDC(0);
+        int rx = rand() % sw;
+        int ry = rand() % sh;    
+        for (int i = 0; i < 17; i++) {
+            BitBlt(desk, rx, 1, sw, sh, desk, rx, 0, SRCCOPY);
+            BitBlt(desk, rx, -1, -sw, sh, desk, rx, 0, SRCCOPY);
+            BitBlt(desk, 1, ry, sw, sh, desk, 0, ry, SRCCOPY);
+            BitBlt(desk, -1, ry, -sw, sh, desk, 0, ry, SRCCOPY);
+        }
+    }
+}
