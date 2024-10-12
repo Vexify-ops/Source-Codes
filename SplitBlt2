@@ -1,0 +1,21 @@
+#include <windows.h>
+
+VOID WINAPI SplitBlt(HDC hcdc, HDC hcdc2, int s, int w, int h, DWORD SRC)
+{
+	BitBlt(hcdc, w / 2 + s, 0, w / 2, h / 2, hcdc2, w / 2, s, SRC);
+	BitBlt(hcdc, w / 2 + s, h / 2 + s, w / 2, h / 2, hcdc2, w / 2, h / 2, SRC);
+	BitBlt(hcdc, 0, 0, w / 2, h / 2, hcdc2, s, s, SRC);
+	BitBlt(hcdc, 0, h / 2 + s, w / 2, h / 2, hcdc2, s, h / 2, SRC);
+}
+
+int main()
+{
+	int w = GetSystemMetrics(0);
+	int h = GetSystemMetrics(1);
+	while (1)
+	{
+		HDC hdc = GetDC(0);
+		SplitBlt(hdc, hdc, 1, w, h, SRCINVERT);
+		ReleaseDC(0, hdc);
+	}
+}
