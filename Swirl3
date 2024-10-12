@@ -1,0 +1,36 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+
+int main()
+{
+    HDC desk = GetDC(0);
+    HWND wnd = GetDesktopWindow();
+    int w = GetSystemMetrics(0);
+    int h = GetSystemMetrics(1);
+    double angle = 0;
+    while (1)
+    {
+        desk = GetDC(0);
+        HDC hdc = CreateCompatibleDC(desk);
+        HBITMAP hbm = CreateCompatibleBitmap(desk, w, h);
+        SelectObject(hdc, hbm);
+        BitBlt(hdc, 0, 0, w, h, desk, 0, 0, SRCCOPY);
+        for (float z = 0; z < w + h; z += 0.99f)
+        {
+            int a = sin(angle) * 20;
+            BitBlt(hdc, 0, z, w, 1, hdc, a, z, SRCCOPY);
+            BitBlt(hdc, z, 0, 1, h, hdc, z, a, SRCCOPY);
+            angle += M_PI / 40;
+            DeleteObject(&z);
+            DeleteObject(&a);
+        }
+        BitBlt(desk, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
+        ReleaseDC(wnd, hdc);
+        DeleteObject(hbm);
+        DeleteObject(hdc);
+        DeleteObject(desk);
+    }
+}
