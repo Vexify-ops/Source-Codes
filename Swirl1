@@ -1,0 +1,27 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#include <math.h>
+#define M_PI 3.14159265358979323846264338327950288
+
+int main()
+{
+	HDC hdc = GetDC(0);
+	int sw = GetSystemMetrics(SM_CXSCREEN), sh = GetSystemMetrics(SM_CYSCREEN), xSize = sh / 10, ySize = 9;
+	while (1) {
+		hdc = GetDC(0); HDC hdcMem = CreateCompatibleDC(hdc);
+		HBITMAP screenshot = CreateCompatibleBitmap(hdc, sw, sh);
+		SelectObject(hdcMem, screenshot);
+		BitBlt(hdcMem, 0, 0, sw, sh, hdc, 0, 0, SRCCOPY);
+		for (int i = 0; i < sh * 2; i++) {
+			int wave = sin(i / ((float)xSize) * M_PI) * (ySize);
+			BitBlt(hdcMem, i, 0, 1, sh, hdcMem, i, wave, SRCCOPY);
+		}
+		for (int i = 0; i < sw * 2; i++) {
+			int wave = sin(i / ((float)xSize) * M_PI) * (ySize);
+			BitBlt(hdcMem, 0, i, sw, 1, hdcMem, wave, i, SRCCOPY);
+		}
+		BitBlt(hdc, 0, 0, sw, sh, hdcMem, 0, 0, SRCCOPY);
+		ReleaseDC(0, hdc);
+		DeleteDC(hdc); DeleteDC(hdcMem); DeleteObject(screenshot);
+	}
+}
