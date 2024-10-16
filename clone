@@ -1,0 +1,23 @@
+#include <windows.h>
+
+int main()
+{
+	HDC hdc = GetDC(0);
+	//HDC hdcCopy = CreateCompatibleDC(hdc);
+	int w = GetSystemMetrics(0);
+	int h = GetSystemMetrics(1);
+	//HBITMAP bmp = CreateCompatibleBitmap(hdc, w, h);
+	//SelectObject(hdcCopy, bmp);
+
+	while (1)
+	{
+		hdc = GetDC(0);
+
+		StretchBlt(hdc, 0, 0, w / 3, h / 3, hdc, 0, 0, w, h, SRCCOPY);
+
+		ReleaseDC(0, hdc);
+		Sleep(10);
+	}
+
+	return 0x00;
+}
