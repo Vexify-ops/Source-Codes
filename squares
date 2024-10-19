@@ -1,0 +1,82 @@
+#include <windows.h>
+#include <cmath> 
+#define M_PI 3.14159265358979323846264338327950288
+
+int red, green, blue;
+bool ifcolorblue = false, ifblue = false;
+COLORREF Hue(int length) {
+	if (red != length) {
+		red < length; red++;
+		if (ifblue == true) {
+			return RGB(red, 0, length);
+		}
+		else {
+			return RGB(red, 0, 0);
+		}
+	}
+	else {
+		if (green != length) {
+			green < length; green++;
+			return RGB(length, green, 0);
+		}
+		else {
+			if (blue != length) {
+				blue < length; blue++;
+				return RGB(0, length, blue);
+			}
+			else {
+				red = 0; green = 0; blue = 0;
+				ifblue = true;
+			}
+		}
+	}
+}
+
+int main()
+{
+	int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+	int signX = 1;
+	int signY = 1;
+	int signX1 = 1;
+	int signY1 = 1;
+	int incrementor = 10;
+	int x = 10;
+	int y = 10;
+	int size = 100;
+	while (1) {
+		HDC hdc = GetDC(0);
+		int top_x = 0 + x;
+		int top_y = 0 + y;
+		int size = size + 1;
+		int bottom_x = size + x;
+		int bottom_y = size + y;
+		x += incrementor * signX;
+		y += incrementor * signY;
+		HBRUSH brush = CreateSolidBrush(Hue(239));
+		SelectObject(hdc, brush);
+		RoundRect(hdc, top_x, top_y, bottom_x, bottom_y, rand() % 128, rand() % 128);
+
+		if (y >= GetSystemMetrics(SM_CYSCREEN))
+		{
+			signY = -1;
+		}
+
+		if (x >= GetSystemMetrics(SM_CXSCREEN))
+		{
+			signX = -1;
+		}
+
+		if (y == 0)
+		{
+			signY = 1;
+		}
+
+		if (x == 0)
+		{
+			signX = 1;
+		}
+		Sleep(10);
+		DeleteObject(brush);
+		ReleaseDC(0, hdc);
+	}
+}
