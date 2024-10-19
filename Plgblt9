@@ -1,0 +1,21 @@
+#include <windows.h>
+
+int main()
+{
+	HWND desktop = GetDesktopWindow();
+    HDC hdc = GetDC(0);
+    RECT wRect;
+    GetWindowRect(desktop, &wRect);
+    int x = wRect.right - wRect.left;
+    int y = wRect.bottom + wRect.top;
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+
+    while (1)
+    {
+        SelectObject(hdc, CreateHatchBrush(rand() % 7, RGB(rand() % 255, rand() % 255, rand() % 255)));
+        StretchBlt(hdc, rand()%50, rand()%50, x - 100, y - 100, hdc, 0, 0, x, y, SRCCOPY);
+        BitBlt(hdc, rand() % 1, rand() % 1, sw, sh, hdc, rand() % 1, rand() % 1, 0x2837E28);
+    }
+
+}
