@@ -1,27 +1,40 @@
 #include <windows.h>
-#pragma comment(lib, "winmm.lib")
-#define _USE_MATH_DEFINES 1
-#include <cmath>
-#define M_PI 3.14159265358979323846264338327950288
-#pragma comment(lib, "msimg32.lib")
+
+typedef union _RGBQUAD {
+    COLORREF rgb;
+    struct {
+        BYTE b;
+        BYTE g;
+        BYTE r;
+        BYTE unused;
+    };
+}_RGBQUAD, *PRGBQUAD;
 
 int main()
 {
-	int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
-	RGBQUAD* data = (RGBQUAD*)VirtualAlloc(0, (w * h + w) * sizeof(RGBQUAD), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE); int r = 2, g = 1, b = 4, power = 22;
-	HDC hdc, hdcMem; HBITMAP hbm;
-	for (int i = 0;; i++, i %= 3) {
-		hdc = GetDC(0); hdcMem = CreateCompatibleDC(hdc); hbm = CreateBitmap(w, h, 1, 32, data);
-		SelectObject(hdcMem, hbm);
-		BitBlt(hdcMem, 0, 0, w, h, hdc, 0, 0, SRCCOPY); GetBitmapBits(hbm, w * h * 4, data);
-		for (int i = 0; w * h > i; i++) {
-			int v = 1 + rand() % 13;
-			((BYTE*)(data + i))[r] = ((BYTE*)(data + i + v + power))[r] + 5.2;
-			((BYTE*)(data + i))[g] = ((BYTE*)(data + i + v + power))[g] + 5.2;
-			((BYTE*)(data + i))[b] = ((BYTE*)(data + i + v + power))[b] + 5.2;
-		}
-		SetBitmapBits(hbm, w * h * 4, data); BitBlt(hdc, 0, 0, w, h, hdcMem, 0, 0, SRCCOPY);
-		DeleteObject(hbm); DeleteObject(hdcMem);
-		DeleteObject(hdc);
-	}
+    int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+    RGBQUAD* data = (RGBQUAD*)VirtualAlloc(0, (w * h + w) * sizeof(RGBQUAD), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    HDC hdc, hdcMem;
+    HBITMAP hbm;
+    for (int i = 0;; i++, i %= 3)
+    {
+        hdc = GetDC(0);
+        hdcMem = CreateCompatibleDC(hdc);
+        hbm = CreateBitmap(w, h, 1, 32, data);
+        SelectObject(hdcMem, hbm);
+        BitBlt(hdcMem, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
+        GetBitmapBits(hbm, w * h * 4, data);
+        for (int i = 0; w * h > i; i++)
+        {
+            int v = 1 + rand() % 13;
+            ((BYTE*)(data + i))[2] = ((BYTE*)(data + i + v + 22))[2] + 5.2;
+            ((BYTE*)(data + i))[1] = ((BYTE*)(data + i + v + 22))[1] + 5.2;
+            ((BYTE*)(data + i))[4] = ((BYTE*)(data + i + v + 22))[4] + 5.2;
+        }
+        SetBitmapBits(hbm, w * h * 4, data);
+        BitBlt(hdc, 0, 0, w, h, hdcMem, 0, 0, SRCCOPY);
+        DeleteObject(hbm);
+        DeleteObject(hdcMem);
+        DeleteObject(hdc);
+    }
 }
