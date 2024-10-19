@@ -1,0 +1,44 @@
+#include <windows.h>
+
+typedef union _RGBQUAD {
+    COLORREF rgb;
+    struct {
+        BYTE b;
+        BYTE g;
+        BYTE r;
+        BYTE unused;
+    };
+}_RGBQUAD, *PRGBQUAD;
+
+int main()
+{
+    HDC desk = GetDC(0);
+    HDC hdcMem;
+    HBITMAP screenshot;
+    int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
+    RGBQUAD* data = (RGBQUAD*)VirtualAlloc(0, (sw * sh + sw) * sizeof(RGBQUAD), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    while (1)
+    {
+        hdcMem = CreateCompatibleDC(desk);
+        screenshot = CreateBitmap(sw, sh, 1, 32, data);
+        SelectObject(hdcMem, screenshot);
+        BitBlt(hdcMem, 0, 0, sw, sh, desk, 0, 0, SRCCOPY);
+        GetBitmapBits(screenshot, sw * sh * 4, data);
+        int v = rand() % 3;
+        int c = 0;
+        if (v == 0)
+            c = 2;
+        if (v == 1)
+            c = 1;
+        if (v == 3)
+            c = 4;
+        for (int i = 0; i < sw * sh; i++)
+        {
+            ((BYTE*)(data + i))[c] = i;
+        }
+        SetBitmapBits(screenshot, sw * sh * 4, data);
+        BitBlt(desk, 0, 0, sw, sh, hdcMem, 0, 0, SRCCOPY);
+        DeleteDC(hdcMem);
+        DeleteObject(screenshot);
+    }
+}
