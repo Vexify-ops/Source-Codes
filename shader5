@@ -1,8 +1,5 @@
 #include <windows.h>
-#pragma comment(lib, "winmm.lib")
-#define _USE_MATH_DEFINES 1
-#include <cmath>
-#define M_PI 3.14159265358979323846264338327950288
+
 
 int red, green, blue;
 bool ifcolorblue = false, ifblue = false;
