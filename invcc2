@@ -1,0 +1,38 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+    HDC hdc = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    int size = 100;
+    int radius = 227;
+    while (1)
+    {
+        hdc = GetDC(0);
+        int origX1 = rand() % sw;
+        int origY1 = rand() % sh;
+        for (int angle = 0; angle < 1081; angle += 12.1)
+        {
+            int x1 = radius * cos(angle * M_PI / 180.0) + origX1;
+            int y1 = radius * sin(angle * M_PI / 180.0) + origY1;
+            if (angle < 720)
+                size += 20;
+            if (angle > 720)
+                size -= 39;
+            POINT points[3] = { {0, 0}, {0, 0}, {0, 0} };
+            points[0] = { x1, y1 };
+            points[1] = { x1 - size, y1 };
+            points[2] = { x1 - size / 2, y1 - size };
+            HRGN circle1 = CreatePolygonRgn(points, 3, WINDING);
+            InvertRgn(hdc, circle1);
+            Sleep(10);
+        }
+        ReleaseDC(0, hdc);
+    }
+}
