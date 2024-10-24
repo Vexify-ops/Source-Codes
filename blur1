@@ -1,0 +1,36 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+	HDC hdc = GetDC(NULL);
+	HDC dcCopy = CreateCompatibleDC(hdc);
+	int w = GetSystemMetrics(0);
+	int h = GetSystemMetrics(1);
+	BITMAPINFO bmpi = { 0 };
+	BLENDFUNCTION blur;
+	HBITMAP bmp;
+	bmpi.bmiHeader.biSize = sizeof(bmpi);
+	bmpi.bmiHeader.biWidth = w;
+	bmpi.bmiHeader.biHeight = h;
+	bmpi.bmiHeader.biPlanes = 1;
+	bmpi.bmiHeader.biBitCount = 32;
+	bmpi.bmiHeader.biCompression = BI_RGB;
+	bmp = CreateDIBSection(hdc, &bmpi, 0, 0, NULL, 0);
+	SelectObject(dcCopy, bmp);
+	blur.BlendOp = AC_SRC_OVER;
+	blur.BlendFlags = 0;
+	blur.AlphaFormat = 0;
+	blur.SourceConstantAlpha = 10;
+	while (1) {
+		hdc = GetDC(NULL);
+		BitBlt(dcCopy, 10, 10, w, h, hdc, -20, -20, SRCCOPY);
+		AlphaBlend(hdc, 0, 0, w, h, dcCopy, 0, 0, w, h, blur);
+		ReleaseDC(0, hdc);
+	}
+	return 0x00;
+}
