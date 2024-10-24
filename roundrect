@@ -1,0 +1,57 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+
+int red, green, blue;
+bool ifcolorblue = false, ifblue = false;
+COLORREF Hue(int length) {
+	if (red != length) {
+		red < length; red++;
+		if (ifblue == true) {
+			return RGB(red, 0, length);
+		}
+		else {
+			return RGB(red, 0, 0);
+		}
+	}
+	else {
+		if (green != length) {
+			green < length; green++;
+			return RGB(length, green, 0);
+		}
+		else {
+			if (blue != length) {
+				blue < length; blue++;
+				return RGB(0, length, blue);
+			}
+			else {
+				red = 0; green = 0; blue = 0;
+				ifblue = true;
+			}
+		}
+	}
+}
+
+
+int main()
+{
+	int centerX = 600;
+	int centerY = 400;
+	int radius = 400;
+	float angle = 0;
+	while (true)
+	{
+		HDC hdc = GetDC(0);
+		int x = centerX + static_cast<int>(radius * cos(angle * M_PI / 180));
+		int y = centerY + static_cast<int>(radius * sin(angle * M_PI / 180));
+		HBRUSH brush = CreateSolidBrush(Hue(239));
+		SelectObject(hdc, brush);
+		RoundRect(hdc, x - 40, y - 40, x + 40, y + 40, x / 2, y / 2);
+		angle += 1;
+		Sleep(10);
+		DeleteObject(brush);
+		ReleaseDC(0, hdc);
+	};
+}
