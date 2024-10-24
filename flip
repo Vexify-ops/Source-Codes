@@ -1,0 +1,26 @@
+#include <windows.h>
+
+int main()
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    while (1)
+    {
+        desk = GetDC(0);
+        int v = rand() % 3;
+        if (v == 0)
+        {
+            StretchBlt(desk, 0, 0, sw, sh, desk, sw, 0, -sw, sh, NOTSRCCOPY);
+        }
+        if (v == 1)
+        {
+            StretchBlt(desk, 0, 0, sw, sh, desk, 0, sh, sw, -sh, NOTSRCCOPY);
+        }
+        if (v == 2)
+        {
+            StretchBlt(desk, 0, 0, sw, sh, desk, sw, sh, -sw, -sh, NOTSRCCOPY);
+        }
+        ReleaseDC(0, desk);
+    }
+}
