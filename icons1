@@ -1,0 +1,55 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    int iw = GetSystemMetrics(11);
+    int ih = GetSystemMetrics(12);
+    int radius = 160.9f;
+    int origX = (sw / 2) - (radius / 2);
+    int origY = (sh / 2) - (radius / 2);
+    int x = 0;
+    int y = 0;
+    int centerX = 0;
+    int centerY = 0;
+    int vx = 15;
+    int vy = 17;
+    double angle = 0;
+    LPCWSTR icons[6] =
+    {
+        IDI_ERROR, IDI_QUESTION, IDI_WARNING, IDI_ASTERISK, IDI_APPLICATION, IDI_SHIELD
+    };
+    while (1)
+    {
+        desk = GetDC(0);
+        HICON icon = LoadIcon(0, icons[rand() % 6]);
+        origX += vx;
+        if (origX < 0)
+            vx = -vx;
+        else if (origX + iw > sw)
+            vx = -vx;
+        origY += vy;
+        if (origY < 0)
+            vy = -vy;
+        else if (origY + ih > sh)
+            vy = -vy;
+        for (int i = 0; i < radius + (iw + ih); i++)
+        {
+            centerX = origX - (iw / 2);
+            centerY = origY - (ih / 2);
+            x = (cos(angle) * radius) + centerX;
+            y = (sin(angle) * radius) + centerY;
+            DrawIcon(desk, x, y, icon);
+            angle = fmod(angle + M_PI / radius, M_PI * radius);
+        }
+        Sleep(10);
+        ReleaseDC(0, desk);
+    }
+}
