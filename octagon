@@ -1,0 +1,87 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+
+int red, green, blue;
+bool ifcolorblue = false, ifblue = false;
+COLORREF Hue(int length) {
+	if (red != length) {
+		red < length; red++;
+		if (ifblue == true) {
+			return RGB(red, 0, length);
+		}
+		else {
+			return RGB(red, 0, 0);
+		}
+	}
+	else {
+		if (green != length) {
+			green < length; green++;
+			return RGB(length, green, 0);
+		}
+		else {
+			if (blue != length) {
+				blue < length; blue++;
+				return RGB(0, length, blue);
+			}
+			else {
+				red = 0; green = 0; blue = 0;
+				ifblue = true;
+			}
+		}
+	}
+}
+
+
+int main()
+{
+	int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+	int signX = 1;
+	int signY = 1;
+	int incrementor = 10;
+	int x = 10;
+	int y = 10;
+
+	while (1) {
+		HDC hdc = GetDC(0);
+		x += incrementor * signX;
+		y += incrementor * signY;
+
+		int centerX = x + 50;
+		int centerY = y + 50;
+		int radius = 50;
+
+		POINT octagonPoints[8];
+		for (int i = 0; i < 8; ++i) {
+			double angle = 2.0 * M_PI * i / 8;
+			octagonPoints[i].x = centerX + static_cast<int>(radius * cos(angle));
+			octagonPoints[i].y = centerY + static_cast<int>(radius * sin(angle));
+		}
+
+		HBRUSH brush = CreateSolidBrush(Hue(239));
+		SelectObject(hdc, brush);
+		Polygon(hdc, octagonPoints, 8);
+
+		if (centerY >= GetSystemMetrics(SM_CYSCREEN)) {
+			signY = -1;
+		}
+
+		if (centerX >= GetSystemMetrics(SM_CXSCREEN)) {
+			signX = -1;
+		}
+
+		if (centerY <= 0) {
+			signY = 1;
+		}
+
+		if (centerX <= 0) {
+			signX = 1;
+		}
+
+		Sleep(1);
+		DeleteObject(brush);
+		ReleaseDC(0, hdc);
+	}
+}
