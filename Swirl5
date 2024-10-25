@@ -1,0 +1,38 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    int xSize = sh / 11;
+    int ySize = 8;
+    while (1)
+    {
+        desk = GetDC(0);
+        HDC hdcMem = CreateCompatibleDC(desk);
+        HBITMAP screenshot = CreateCompatibleBitmap(desk, sw, sh);
+        SelectObject(hdcMem, screenshot);
+        BitBlt(hdcMem, 0, 0, sw, sh, desk, 0, 0, SRCCOPY);
+        for (int i = 0; i < sh * 2; i++)
+        {
+            int wave = sin(i / ((float)xSize) * M_PI) * (ySize);
+            BitBlt(hdcMem, i, 0, 1, sh, hdcMem, i, wave, SRCCOPY);
+        }
+        for (int i = 0; i < sw * 2; i++)
+        {
+            int wave = sin(i / ((float)xSize) * M_PI) * (ySize);
+            BitBlt(hdcMem, 0, i, sw, 1, hdcMem, wave, i, SRCCOPY);
+        }
+        BitBlt(desk, 0, 0, sw, sh, hdcMem, 0, 0, SRCCOPY);
+        ReleaseDC(0, desk);
+        DeleteDC(desk);
+        DeleteDC(hdcMem);
+        DeleteObject(screenshot);
+    }
+}
