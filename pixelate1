@@ -1,0 +1,32 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+    HDC desk;
+    HDC hdcMem;
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    while (1)
+    {
+        for (int p = 2; p < sw / 16; p += 2)
+        {
+            desk = GetDC(0);
+            hdcMem = CreateCompatibleDC(desk);
+            HBITMAP screenshot = CreateCompatibleBitmap(desk, sw / p, sh / p);
+            SetStretchBltMode(hdcMem, STRETCH_DELETESCANS);
+            SelectObject(hdcMem, screenshot);
+            StretchBlt(hdcMem, 0, 0, sw / p, sh / p, desk, 0, 0, sw, sh, SRCCOPY);
+            StretchBlt(desk, 0, 0, sw, sh, hdcMem, 0, 0, sw / p, sh / p, SRCCOPY);
+            DeleteDC(desk);
+            DeleteDC(hdcMem);
+            DeleteObject(screenshot);
+            Sleep(10);
+            ReleaseDC(0, desk);
+        }
+    }
+}
