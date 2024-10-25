@@ -1,0 +1,28 @@
+#include <windows.h>
+
+int main()
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    while (1)
+    {
+        desk = GetDC(0);
+        for (int r = 18; r < 255; r++)
+        {
+            SelectObject(desk, CreateSolidBrush(RGB(r, 0, 0)));
+            BitBlt(desk, 0, 0, sw, sh, desk, rand() % 3 - 1, rand() % 3 - 1, SRCCOPY | 0x00ac000e);
+        }
+        for (int g = 18; g < 255; g++)
+        {
+            SelectObject(desk, CreateSolidBrush(RGB(0, g, 0)));
+            BitBlt(desk, 0, 0, sw, sh, desk, rand() % 3 - 1, rand() % 3 - 1, SRCCOPY | 0x00ac000e);
+        }
+        for (int b = 18; b < 255; b++)
+        {
+            SelectObject(desk, CreateSolidBrush(RGB(0, 0, b)));
+            BitBlt(desk, 0, 0, sw, sh, desk, rand() % 3 - 1, rand() % 3 - 1, SRCCOPY | 0x00ac000e);
+        }
+        ReleaseDC(0, desk);
+    }
+}
