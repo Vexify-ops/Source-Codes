@@ -1,0 +1,190 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+typedef struct
+{
+	float x;
+	float y;
+	float z;
+} VERTEX;
+
+typedef struct
+{
+	int vtx0;
+	int vtx1;
+} EDGE;
+
+namespace _3D
+{
+	VOID RotateX(VERTEX* vtx, float angle)
+	{
+		vtx->y = cos(angle) * vtx->y - sin(angle) * vtx->z;
+		vtx->z = sin(angle) * vtx->y + cos(angle) * vtx->z;
+	}
+	VOID RotateY(VERTEX* vtx, float angle)
+	{
+		vtx->x = cos(angle) * vtx->x + sin(angle) * vtx->z;
+		vtx->z = -sin(angle) * vtx->x + cos(angle) * vtx->z;
+	}
+	VOID RotateZ(VERTEX* vtx, float angle)
+	{
+		vtx->x = cos(angle) * vtx->x - sin(angle) * vtx->y;
+		vtx->y = sin(angle) * vtx->x + cos(angle) * vtx->y;
+	}
+	void DrawEdge(HDC dc, LPCWSTR icon, int x0, int y0, int x1, int y1, int r)
+	{
+		int dx = abs(x1 - x0);
+		int dy = -abs(y1 - y0);
+		int sx = (x0 < x1) ? 1 : -1;
+		int sy = (y0 < y1) ? 1 : -1;
+		int error = dx + dy;
+		int i = 0;
+		while (true)
+		{
+			if (i == 0)
+			{
+				DrawIcon(dc, x0, y0, LoadIcon(NULL, icon));
+				i = 10;
+			}
+			else
+			{
+				i--;
+			}
+			if (x0 == x1 && y0 == y1)
+			{
+				break;
+			}
+			int e2 = 2 * error;
+			if (e2 >= dy)
+			{
+				if (x0 == x1)
+				{
+					break;
+				}
+				error += dy;
+				x0 += sx;
+			}
+			if (e2 <= dx)
+			{
+				if (y0 == y1)
+				{
+					break;
+				}
+				error += dx;
+				y0 += sy;
+			}
+		}
+	}
+}
+
+int main()
+{
+	HDC dc = GetDC(0);
+	HDC dcCopy = CreateCompatibleDC(dc);
+	int w = GetSystemMetrics(0);
+	int h = GetSystemMetrics(1);
+	float size = (w + h) / 10;
+	int cx = size;
+	int cy = size;
+	int xdv = 10;
+	int ydv = 10;
+	float angleX = 0.01;
+	float angleY = 0.01;
+	float angleZ = 0.01;
+	int d = 60;
+	VERTEX vtx[] =
+	{
+		{size, 0, 0},
+		{size, size, 0},
+		{0, size, 0},
+		{0, 0, 0},
+		{size, 0, size},
+		{size, size, size},
+		{0, size, size},
+		{0, 0, size},
+		{size - d,  d,      d},
+		{size - d,  size - d,  d},
+		{d,      size - d,  d},
+		{d,      d,      d},
+		{size - d,  d,      size - d},
+		{size - d,  size - d,  size - d},
+		{d,      size - d,  size - d},
+		{d,      d,      size - d}
+	};
+	EDGE edges[] =
+	{
+		{0, 1},
+		{1, 2},
+		{2, 3},
+		{3, 0},
+		{0, 4},
+		{1, 5},
+		{2, 6},
+		{3, 7},
+		{4, 5},
+		{5, 6},
+		{6, 7},
+		{7, 4},
+		{8,   9},
+		{9,  10},
+		{10, 11},
+		{11,  8},
+		{8,  12},
+		{9,  13},
+		{10, 14},
+		{11, 15},
+		{12, 13},
+		{13, 14},
+		{14, 15},
+		{15, 12},
+		{0,  8},
+		{1,  9},
+		{2, 10},
+		{3, 11},
+		{4, 12},
+		{5, 13},
+		{6, 14},
+		{7, 15}
+	};
+	LPCWSTR icons[] =
+	{
+		IDI_ERROR, IDI_QUESTION, IDI_WARNING, IDI_ASTERISK, IDI_APPLICATION, IDI_SHIELD
+	};
+	int index = rand() % 6;
+	int totvtx = sizeof(vtx) / sizeof(vtx[0]);
+	int totedg = sizeof(edges) / sizeof(edges[0]);
+	while (true)
+	{
+		dc = GetDC(NULL);
+		for (int i = 0; i < totvtx; i++)
+		{
+			_3D::RotateX(&vtx[i], angleX);
+			_3D::RotateY(&vtx[i], angleY);
+			_3D::RotateZ(&vtx[i], angleZ);
+		}
+		for (int i = 0; i < totedg; i++)
+		{
+			_3D::DrawEdge(dc, icons[index],
+				vtx[edges[i].vtx0].x + cx, vtx[edges[i].vtx0].y + cy,
+				vtx[edges[i].vtx1].x + cx, vtx[edges[i].vtx1].y + cy, 20);
+		}
+		Sleep(40);
+		cx += xdv;
+		cy += ydv;
+		if (cx > w - (size / 2) || cx < -(size / 2))
+		{
+			xdv *= -1;
+			index = rand() % 6;
+		}
+		if (cy > h - (size / 2) || cy < -(size / 2))
+		{
+			ydv *= -1;
+			index = rand() % 6;
+		}
+		ReleaseDC(0, dc);
+	}
+	return 0x00;
+}
