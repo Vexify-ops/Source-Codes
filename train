@@ -1,0 +1,57 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+
+int main()
+{
+    HDC hDC;
+    tagCURSORINFO local_28;
+    tagPOINT local_14;
+    int local_c;
+    hDC = GetDC((HWND)0x0);
+    HDC hdc = GetDC(0);
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
+    int x = GetSystemMetrics(0), y = GetSystemMetrics(1);
+    double angle = 0;
+    while (1)
+    {
+        desk = GetDC(0);
+        hdc = GetDC(0);
+        if (rand() % 5 == 3) InvalidateRect(0, 0, 0);
+        int ax = (int)(cos(angle) * 5);
+        int ay = (int)(sin(angle) * 5);
+        BitBlt(desk, ax, ay, sw, sh, desk, 0, 0, SRCCOPY);
+        angle = fmod(angle + M_PI / 16.f, M_PI * 2.f);
+        BitBlt(hdc, -20, 0, x, y, hdc, 0, 0, SRCCOPY);
+        BitBlt(hdc, x - 20, 0, x, y, hdc, 0, 0, SRCCOPY);
+        GetCursorPos(&local_14);
+        local_28.cbSize = 0x14;
+        GetCursorInfo(&local_28);
+        RedrawWindow(0, 0, 0, 133);
+        Sleep(25);
+        DrawIcon(hDC, local_14.x - 10, local_14.y - 10, LoadIcon(0, IDI_ERROR));
+        DrawIcon(hDC, local_14.x + 10, local_14.y + 10, LoadIcon(0, IDI_ERROR));
+        DrawIcon(hDC, local_14.x - 10, local_14.y + 10, LoadIcon(0, IDI_ERROR));
+        DrawIcon(hDC, local_14.x + 10, local_14.y - 10, LoadIcon(0, IDI_ERROR));
+        DrawIcon(hDC, local_14.x - 40, local_14.y - 40, LoadIcon(0, IDI_WARNING));
+        DrawIcon(hDC, local_14.x + 40, local_14.y + 40, LoadIcon(0, IDI_WARNING));
+        DrawIcon(hDC, local_14.x - 40, local_14.y + 40, LoadIcon(0, IDI_WARNING));
+        DrawIcon(hDC, local_14.x + 40, local_14.y - 40, LoadIcon(0, IDI_WARNING));
+        DrawIcon(hDC, local_14.x - 70, local_14.y - 70, LoadIcon(0, IDI_INFORMATION));
+        DrawIcon(hDC, local_14.x + 70, local_14.y + 70, LoadIcon(0, IDI_INFORMATION));
+        DrawIcon(hDC, local_14.x - 70, local_14.y + 70, LoadIcon(0, IDI_INFORMATION));
+        DrawIcon(hDC, local_14.x + 70, local_14.y - 70, LoadIcon(0, IDI_INFORMATION));
+        DrawIcon(hDC, local_14.x - 100, local_14.y - 100, LoadIcon(0, IDI_QUESTION));
+        DrawIcon(hDC, local_14.x + 100, local_14.y + 100, LoadIcon(0, IDI_QUESTION));
+        DrawIcon(hDC, local_14.x - 100, local_14.y + 100, LoadIcon(0, IDI_QUESTION));
+        DrawIcon(hDC, local_14.x + 100, local_14.y - 100, LoadIcon(0, IDI_QUESTION));
+        DrawIcon(hDC, local_14.x - 130, local_14.y - 130, LoadIcon(0, IDI_APPLICATION));
+        DrawIcon(hDC, local_14.x + 130, local_14.y + 130, LoadIcon(0, IDI_APPLICATION));
+        DrawIcon(hDC, local_14.x - 130, local_14.y + 130, LoadIcon(0, IDI_APPLICATION));
+        DrawIcon(hDC, local_14.x + 130, local_14.y - 130, LoadIcon(0, IDI_APPLICATION));
+        Sleep(100);
+    }
+}
