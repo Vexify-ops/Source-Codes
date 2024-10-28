@@ -1,0 +1,45 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+typedef union _RGBQUAD {
+    COLORREF rgb;
+    struct {
+        BYTE r;
+        BYTE g;
+        BYTE b;
+        BYTE Reserved;
+    };
+}_RGBQUAD, * PRGBQUAD;
+
+int main()
+{
+    HDC hdcScreen = GetDC(0), hdcMem = CreateCompatibleDC(hdcScreen);
+    INT w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+    BITMAPINFO bmi = { 0 };
+    PRGBQUAD rgbScreen = { 0 };
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFO);
+    bmi.bmiHeader.biBitCount = 32;
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biWidth = w;
+    bmi.bmiHeader.biHeight = h;
+    HBITMAP hbmTemp = CreateDIBSection(hdcScreen, &bmi, NULL, (void**)&rgbScreen, NULL, NULL);
+    SelectObject(hdcMem, hbmTemp);
+    COLORREF TransparentBltColor = (RGB(rand() % 255, rand() % 255, rand() % 255));
+    for (;;)
+    {
+        hdcScreen = GetDC(0);
+        BitBlt(hdcMem, 0, 0, w, h, hdcScreen, 0, 0, SRCCOPY);
+        for (INT i = 0; i < w * h; i++)
+        {
+            INT x = i % w, y = i / w;
+            rgbScreen[i].r = x ^ y;
+        }
+        TransparentBlt(hdcScreen, rand() % 225, rand() % 225, w, h, hdcMem, rand() % 225, rand() % 225, rand() % 225, rand() % 225, TransparentBltColor);
+        ReleaseDC(NULL, hdcScreen);
+        DeleteDC(hdcScreen);
+    }
+}
