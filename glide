@@ -1,0 +1,42 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+#define time
+
+void GlideCursorTo(int targetX, int targetY) {
+    POINT cursorPos;
+    GetCursorPos(&cursorPos);
+
+    int startX = cursorPos.x;
+    int startY = cursorPos.y;
+
+    int distance = static_cast<int>(sqrt(pow(targetX - startX, 2) + pow(targetY - startY, 2)));
+
+    int steps = 100;
+    for (int i = 1; i <= steps; i++) {
+        int x = startX + (targetX - startX) * i / steps;
+        int y = startY + (targetY - startY) * i / steps;
+
+        SetCursorPos(x, y);
+        Sleep(5);
+    }
+}
+int main() {
+    srand(static_cast<unsigned int>(time(0)));
+
+    while (true) {
+        int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+        int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+        int targetX = rand() % screenWidth;
+        int targetY = rand() % screenHeight;
+
+        GlideCursorTo(targetX, targetY);
+
+    }
+
+    return 0;
+}
