@@ -1,0 +1,55 @@
+#include <windows.h>
+
+int red, green, blue;
+bool ifcolorblue = false, ifblue = false;
+COLORREF Hue(int length) {
+	if (red != length) {
+		red < length; red++;
+		if (ifblue == true) {
+			return RGB(red, 0, length);
+		}
+		else {
+			return RGB(red, 0, 0);
+		}
+	}
+	else {
+		if (green != length) {
+			green < length; green++;
+			return RGB(length, green, 0);
+		}
+		else {
+			if (blue != length) {
+				blue < length; blue++;
+				return RGB(0, length, blue);
+			}
+			else {
+				red = 0; green = 0; blue = 0;
+				ifblue = true;
+			}
+		}
+	}
+}
+
+
+int main()
+{
+	while (1)
+	{
+		HDC hdc = GetDC(0);
+		POINT cursor;
+		GetCursorPos(&cursor);
+		HBRUSH brush = CreateSolidBrush(Hue(239));
+		SelectObject(hdc, brush);
+		Ellipse(hdc, cursor.x + 30, cursor.y + 30, cursor.x - 30, cursor.y - 30);
+		Ellipse(hdc, cursor.x + 45, cursor.y + 45, cursor.x - 45, cursor.y - 45);
+		Ellipse(hdc, cursor.x + 40, cursor.y + 40, cursor.x - 40, cursor.y - 40);
+		Ellipse(hdc, cursor.x + 25, cursor.y + 25, cursor.x - 25, cursor.y - 25);
+		Ellipse(hdc, cursor.x + 30, cursor.y + 30, cursor.x - 30, cursor.y - 30);
+		Ellipse(hdc, cursor.x + 25, cursor.y + 25, cursor.x - 25, cursor.y - 25);
+		Ellipse(hdc, cursor.x + 20, cursor.y + 20, cursor.x - 20, cursor.y - 20);
+		Ellipse(hdc, cursor.x + 10, cursor.y + 10, cursor.x - 10, cursor.y - 10);
+		DeleteObject(brush);
+		ReleaseDC(0, hdc);
+		Sleep(10);
+	}
+}
