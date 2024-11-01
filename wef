@@ -1,0 +1,33 @@
+#include <windows.h>
+
+VOID WINAPI ci2(int x, int y, int w, int h)
+{
+	HDC hdc = GetDC(0);
+	HRGN hrgn = CreateEllipticRgn(x, y, w + x, h + y);
+	if ((rand() % 2) == 0) SelectClipRgn(hdc, hrgn);
+	HBRUSH brush = CreateSolidBrush(RGB(rand() % 255, rand() % 255, rand() % 255));
+	SelectObject(hdc, brush);
+	BitBlt(hdc, x, y, w, h, hdc, x, y, 0x2837E28);
+	DeleteObject(hrgn);
+	DeleteObject(brush);
+	ReleaseDC(NULL, hdc);
+}
+
+int main()
+{
+	RECT rect;
+	GetWindowRect(GetDesktopWindow(), &rect);
+	int w = rect.right - rect.left - 500, h = rect.bottom - rect.top - 500;
+
+	for (int t = 0;; t++)
+	{
+		int size = rand() % 1000 + 1;
+		int x = rand() % (w + size) - size / 2, y = rand() % (h + size) - size / 2;
+
+		for (int i = 0; i < size; i += 100)
+		{
+			ci2(x - i / 2, y - i / 2, i, i);
+		}
+		Sleep(100);
+	}
+}
