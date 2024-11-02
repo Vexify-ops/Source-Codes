@@ -1,0 +1,21 @@
+#include <windows.h>
+
+COLORREF RndRGB() {
+	int clr = rand() % 5;
+	if (clr == 0) return RGB(255, 0, 0); if (clr == 1) return RGB(0, 255, 0); if (clr == 2) return RGB(0, 0, 255); if (clr == 3) return RGB(255, 0, 255); if (clr == 4) return RGB(255, 255, 0);
+}
+
+int main()
+{
+	while (1) {
+		HDC hdc = GetDC(NULL);
+		int w = GetSystemMetrics(SM_CXSCREEN),
+			h = GetSystemMetrics(SM_CYSCREEN);
+
+		HBRUSH brush = CreateSolidBrush(RndRGB()); //credits to N17Pro3426 for the RndRGB Function
+		SelectObject(hdc, brush);
+		PatBlt(hdc, 0, 0, w, h, PATINVERT);
+		DeleteObject(brush);
+		ReleaseDC(NULL, hdc);
+	}
+}
