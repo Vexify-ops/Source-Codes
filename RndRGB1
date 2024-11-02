@@ -1,0 +1,36 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+
+COLORREF RndRGB() {
+	int clr = rand() % 5;
+	if (clr == 0) return RGB(255, 0, 0); if (clr == 1) return RGB(0, 255, 0); if (clr == 2) return RGB(0, 0, 255); if (clr == 3) return RGB(255, 0, 255); if (clr == 4) return RGB(255, 255, 0);
+}
+
+int main()
+{
+	int w = GetSystemMetrics(0);
+	int h = GetSystemMetrics(1);
+	while (1)
+	{
+		HDC hdc = GetDC(0);
+		int centerX = rand() % w + 50;
+		int centerY = rand() % h + 50;
+		int radius = 50;
+		POINT hexagonPoints[6];
+		for (int i = 0; i < 6; ++i)
+		{
+			double angle = 2.0 * M_PI * i / 6;
+			hexagonPoints[i].x = centerX + static_cast<int>(radius * cos(angle));
+			hexagonPoints[i].y = centerY + static_cast<int>(radius * sin(angle));
+		}
+		HBRUSH brush = CreateSolidBrush(RndRGB());
+		SelectObject(hdc, brush);
+		Polygon(hdc, hexagonPoints, 6);
+		Sleep(10);
+		DeleteObject(brush);
+		ReleaseDC(0, hdc);
+	}
+}
