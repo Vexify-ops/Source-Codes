@@ -1,0 +1,61 @@
+#include <windows.h>
+
+
+COLORREF GetRandomRainbowSpectrum() {
+    int color = rand () % 7;
+    if (color == 0) {
+        return RGB(255, 0, 0); 
+    }
+    if (color == 1) {
+        return RGB(255, 150, 0); 
+    }
+    if (color == 2) {
+        return RGB(255, 255, 0); 
+    }
+    if (color == 3) {
+        return RGB(0, 255, 0); 
+    }
+    if (color == 4) {
+        return RGB(0, 255, 255);
+    }
+    if (color == 5) {
+        return RGB(0, 0, 255);
+    }
+    if (color == 6) {
+        return RGB(255, 0, 255);
+    }
+}
+
+
+int main()
+{
+	HDC hdc;
+	HPEN hp;
+	int sx = 1, sy = 1, sx1 = 1, sy1 = 1;
+	int incrementation = 10;
+	int x = 10, y = 10;
+	while (1) {
+		hdc = GetDC(0);
+		x += incrementation * sx;
+		y += incrementation * sy;
+		POINT opt[4] = {{360, y}, {x, y}, {50, 178}};
+		hp = CreatePen(PS_SOLID, rand() % 5 + 10, GetRandomRainbowSpectrum());
+		SelectObject(hdc, hp);
+		PolyBezier(hdc, opt, 4);
+		if (y >= GetSystemMetrics(1)) {
+			sy = -1;
+		}
+		if (x >= GetSystemMetrics(0)) {
+			sx = -1;
+		}
+		if (y == 0) {
+			sy = 1;
+		}
+		if (x == 0) {
+			sx = 1;
+		}
+		DeleteObject(hp);
+		ReleaseDC(0, hdc);
+		Sleep(10);
+	}
+}
