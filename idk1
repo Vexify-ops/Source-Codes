@@ -1,0 +1,46 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+
+DWORD WINAPI idk1(LPVOID lpParam)
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    int radius = 17.f;
+    double angle = 0;
+    int size = 200;
+    int origX = (sw / 2) - (size / 2);
+    int origY = (sh / 2) - (size / 2);
+    while (1)
+    {
+        desk = GetDC(0);
+        for (int c = 0; c < 34567; c++)
+        {
+            if (radius < sw + 1)
+                radius += 1.f;
+            if (radius > sw - 2)
+            {
+                radius = 17.f;
+            }
+            float x = (cos(angle + radius) * radius) + origX;
+            float y = (sin(angle + radius) * radius) + origY;
+            float sx = (cos(angle + radius) * (radius + 1)) + origX;
+            float sy = (sin(angle + radius) * (radius + 1)) + origY;
+            BitBlt(desk, x, y, size, size, desk, sx, sy, SRCCOPY);
+            angle = fmod(angle + M_PI / radius, M_PI * radius);
+        }
+        origX = -size + rand() % (sw + size);
+        origY = -size + rand() % (sh + size);
+        ReleaseDC(0, desk);
+    }
+}
+
+int main() {
+        HANDLE thread = CreateThread(0, 0, idk1, 0, 0, 0);
+        Sleep(-1);
+}
