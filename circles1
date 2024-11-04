@@ -30,7 +30,6 @@ COLORREF Hue(int length) {
 	}
 }
 
-
 int main()
 {
 	while (1)
