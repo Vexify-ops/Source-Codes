@@ -1,0 +1,39 @@
+#include <windows.h>
+
+
+DWORD WINAPI plgblt(LPVOID lpParam)
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(0);
+    int counter = 0;
+    int v = 0;
+    POINT pt[3];
+    RECT rekt;
+    while (1)
+    {
+        desk = GetDC(0);
+        v = rand() % 2;
+        if (v == 0)
+            counter = 61;
+        else counter = -61;
+        GetWindowRect(GetDesktopWindow(), &rekt);
+        for (int c = 0; c < 4 + rand() % 5; c++)
+        {
+            pt[0].x = rekt.left + counter;
+            pt[0].y = rekt.top - counter;
+            pt[1].x = rekt.right + counter;
+            pt[1].y = rekt.top + counter;
+            pt[2].x = rekt.left - counter;
+            pt[2].y = rekt.bottom - counter;
+            PlgBlt(desk, pt, desk, rekt.left, rekt.top, rekt.right - rekt.left, rekt.bottom - rekt.top, 0, 0, 0);
+        }
+        ReleaseDC(0, desk);
+    }
+}
+
+
+int main() {
+        HANDLE thread = CreateThread(0, 0, plgblt, 0, 0, 0);
+        Sleep(-1);
+}
