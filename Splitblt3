@@ -1,0 +1,15 @@
+#include <windows.h>
+#define NOTSRCINVERT 0x999999ul
+
+
+int main()
+{
+	int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+	HDC hdc;
+	while (1) {
+		hdc = GetDC(0);
+		SplitBlt(hdc, -5, w, h, NOTSRCINVERT); // example value
+		ReleaseDC(0, hdc);
+		Sleep(10);
+	}
+}
