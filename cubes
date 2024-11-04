@@ -1,0 +1,28 @@
+#include <windows.h>
+
+
+DWORD WINAPI cubes(LPVOID lpParam)
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    int size = 200;
+    while (1)
+    {
+        desk = GetDC(0);
+        for (int x = 0; x < sw; x += size)
+        {
+            for (int y = 0; y < sh; y += size)
+            {
+                StretchBlt(desk, x, y, size, size, desk, x, y, size + 13, size + 13, SRCCOPY);
+                StretchBlt(desk, x, y, size, size, desk, x, y, size - 13, size - 13, SRCCOPY);
+            }
+        }
+        ReleaseDC(0, desk);
+    }
+}
+
+int main() {
+        HANDLE thread = CreateThread(0, 0, cubes, 0, 0, 0);
+        Sleep(-1);
+}
