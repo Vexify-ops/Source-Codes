@@ -1,0 +1,26 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+
+DWORD WINAPI wave(LPVOID lpParam)
+{
+	int sw = GetSystemMetrics(SM_CXSCREEN), sh = GetSystemMetrics(SM_CYSCREEN), xSize = sh / 10, ySize = 9;
+	while (1) {
+		HDC hdc = GetDC(0);
+		for (int i = 0; i < sh*2; i++) {
+		    int wave = sin(i / ((float)xSize) * M_PI) * (ySize);
+		    BitBlt(hdc, i, 0, 1, sh, hdc, i, wave, SRCCOPY);
+		}
+		if ((rand() % 100 + 1) % 67 == 0);
+		ReleaseDC(0, hdc);
+	}
+}
+
+int main() {
+        HANDLE thread = CreateThread(0, 0, wave, 0, 0, 0);
+        Sleep(-1);
+}
