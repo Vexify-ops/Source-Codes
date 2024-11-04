@@ -1,0 +1,58 @@
+#include <windows.h>
+
+
+DWORD WINAPI winshake(LPVOID lpParam)
+{
+    int x = GetSystemMetrics(SM_CXSCREEN);
+    int y = GetSystemMetrics(SM_CYSCREEN);
+
+    RECT rekt;
+
+    while (true) {
+        HWND hwnd = GetForegroundWindow();
+        GetWindowRect(hwnd, &rekt);
+
+        int sel = rand() % 4 + 1;
+
+        if (rekt.left >= x) {
+            rekt.left = 0;
+        }
+        else if (rekt.top >= y) {
+            rekt.top = 0;
+        }
+        else if (rekt.left <= 0) {
+            rekt.left = 0;
+        }
+        else if (rekt.top <= 0) {
+            rekt.top = 0;
+        }
+
+        int xs = rekt.left;
+        int ys = rekt.top;
+        int rnd = rand() % 100 + 60;
+
+        for (int i = 0; i < rnd; i += 20) {
+            if (sel == 1) {
+                SetWindowPos(hwnd, 0, xs + i, ys + i, xs, ys, 0);
+                Sleep(10);
+            }
+            else if (sel == 2) {
+                SetWindowPos(hwnd, 0, xs - i, ys + i, xs, ys, 0);
+                Sleep(10);
+            }
+            else if (sel == 3) {
+                SetWindowPos(hwnd, 0, xs + i, ys - i, xs, ys, 0);
+                Sleep(10);
+            }
+            else if (sel == 4) {
+                SetWindowPos(hwnd, 0, xs - i, ys - i, xs, ys, 0);
+                Sleep(10);
+            }
+        }
+    }
+}
+
+int main() {
+    HANDLE thread = CreateThread(0, 0, winshake, 0, 0, 0);
+    Sleep(-1);
+}
