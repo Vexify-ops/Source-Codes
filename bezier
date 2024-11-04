@@ -1,6 +1,5 @@
 #include <windows.h>
 
-
 COLORREF GetRandomRainbowSpectrum() {
     int color = rand () % 7;
     if (color == 0) {
@@ -25,7 +24,6 @@ COLORREF GetRandomRainbowSpectrum() {
         return RGB(255, 0, 255);
     }
 }
-
 
 int main()
 {
