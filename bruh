@@ -1,0 +1,46 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+
+DWORD WINAPI bruh(LPVOID lpParam)
+{
+    HDC desk = GetDC(0);
+    int sw = GetSystemMetrics(0);
+    int sh = GetSystemMetrics(1);
+    int radius = 3.f;
+    int size = 200.f;
+    int origX = (sw / 2) - (size / 2);
+    int origY = (sh / 2) - (size / 2);
+    double angle = 0;
+    while (1)
+    {
+        desk = GetDC(0);
+        if (radius < sw)
+            radius += size + 44;
+        if (radius > (sw - 2))
+        {
+            origX = rand() % (sw - size);
+            origY = rand() % (sh - size);
+            radius = 50.f;
+        };
+        SelectObject(desk, CreateSolidBrush(RGB(rand() % 255, rand() % 255, rand() % 255)));
+        for (int c = 0; c < ((radius * 2) + 90.8f); c++)
+        {
+            double x = (cos(angle + radius) * radius) + origX;
+            double y = (sin(angle + radius) * radius) + origY;
+            BitBlt(desk, x, y, size, size, desk, x, y, MERGECOPY);
+            angle = fmod(angle + M_PI / radius, M_PI * radius);
+        }
+        ReleaseDC(0, desk);
+    }
+}
+
+
+int main() {
+        HANDLE thread = CreateThread(0, 0, bruh, 0, 0, 0);
+        Sleep(-1);
+}
