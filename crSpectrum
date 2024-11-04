@@ -1,0 +1,76 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+
+COLORREF crSpectrum(int crLength) {
+    double H = fmod(crLength, 360);
+    double S = 1.0;
+    double V = 0.5;
+    double C = (1.0-fabs(2.0*V-1.0)) * S;
+    double X = C*(1.0-fabs(fmod(H/60.0, 2.0) - 1.0));
+    double M = V - C / 2.0;
+    double R, G, B;
+    if (H < 60) {
+        R = C; G = X, B = 0;
+    }
+    else if (H < 120) {
+        R = X; G = C; B = 0;
+    }
+    else if (H < 180) {
+        R = 0; G = C; B = X;
+    }
+    else if (H < 240) {
+        R = 0; G = X; B = C;
+    }
+    else if (H < 300) {
+        R = X; G = 0; B = C;
+    }
+    else {
+        R = C; G = 0; B = X;
+    }
+    
+    int crRed = static_cast<INT>((R + M) * 255);
+    int crGreen = static_cast<INT>((G + M) * 255);
+    int crBlue = static_cast<INT>((B + M) * 255);
+    return RGB(crRed, crGreen, crBlue);
+}
+
+float fclr = 0.0;
+
+int main()
+{
+		HDC hdc;
+		HPEN hp;
+		int sx = 1, sy = 1, sx1 = 1, sy1 = 1;
+		int incrementation = 5;
+		int x = 10, y = 10;
+		while (1) {
+			hdc = GetDC(0);
+			x += incrementation * sx;
+			y += incrementation * sy;
+			hp = CreatePen(PS_SOLID, 10, crSpectrum(fclr));
+			SelectObject(hdc, hp);
+			Arc(hdc, x, y, x+200, y+200, x+200, y+200, x+200, y+200);
+			fclr += M_PI;
+			if (y >= GetSystemMetrics(1)) {
+				sy = -1;
+			}
+			if (x >= GetSystemMetrics(0)) {
+				sx = -1;
+			}
+			if (y == 0) {
+				sy = 1;
+			}
+			if (x == 0) {
+				sx = 1;
+			}
+			DeleteObject(hp);
+			ReleaseDC(0, hdc);
+			Sleep(10);
+		}
+}
