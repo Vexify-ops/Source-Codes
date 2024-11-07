@@ -1,0 +1,32 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+VOID WINAPI train(HDC hdc, int w, int h, int xPower, int yPower, DWORD dwRop) {
+	if (xPower >= w) xPower = w - 1; if (yPower >= h) yPower = h - 1;
+	HBITMAP screenshot = CreateCompatibleBitmap(hdc, w, h);
+	HDC hdc2 = CreateCompatibleDC(hdc); rand() % 6;
+	SelectObject(hdc2, screenshot);
+	BitBlt(hdc2, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
+	BitBlt(hdc, xPower > 0 ? xPower : 0, yPower > 0 ? yPower : 0, w - abs(xPower), h - abs(yPower), hdc, xPower < 0 ? -xPower : 0, yPower < 0 ? -yPower : 0, dwRop);
+	BitBlt(hdc, xPower < 0 ? w + xPower : 0, 0, abs(xPower), h, hdc2, xPower > 0 ? w - xPower : 0, 0, dwRop);
+	BitBlt(hdc, 0, yPower < 0 ? h + yPower : 0, w, abs(yPower), hdc2, 0, yPower > 0 ? h - yPower : 0, dwRop);
+	DeleteDC(hdc2); DeleteObject(screenshot);
+}
+int main() {
+	HDC hdcdc = GetDC(0);
+	int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
+	while (1) {
+		hdcdc = GetDC(0);
+		//SelectObject(hdcdc, CreateSolidBrush(RGB(245, 245, 66)));
+		for (int angle = 0; angle < 361; angle++) {
+			int x = 100 * cos(angle * M_PI / 180.F), y = 100 * sin(angle * M_PI / 180.F);
+			train(hdcdc, sw, sh, x, y, SRCCOPY);
+			Sleep(0.5);
+		}
+		ReleaseDC(0, hdcdc);
+	}
+}
