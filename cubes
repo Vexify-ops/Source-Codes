@@ -1,6 +1,5 @@
 #include <windows.h>
 
-
 DWORD WINAPI cubes(LPVOID lpParam)
 {
     HDC desk = GetDC(0);
