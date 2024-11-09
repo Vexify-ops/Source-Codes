@@ -1,0 +1,15 @@
+#include <windows.h>
+
+int main()
+{
+	HDC hdc;
+	int sw, sh;
+	while (1) {
+		hdc = GetDC(0);
+		sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
+		BitBlt(hdc, rand () % 4, -4, sw, sh, hdc, 0, 0, SRCERASE);
+		BitBlt(hdc, 5, -5, sw, sh, hdc, 0, 0, SRCINVERT);
+		ReleaseDC(NULL, hdc);
+		Sleep(10);
+	}
+}
