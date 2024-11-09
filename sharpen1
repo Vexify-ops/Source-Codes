@@ -1,0 +1,14 @@
+#include <windows.h>
+#include <cmath>
+
+int w = GetSystemMetrics(SM_CXSCREEN), h = GetSystemMetrics(SM_CYSCREEN);
+int w2 = GetSystemMetrics(SM_CXICON), h2 = GetSystemMetrics(SM_CYICON);
+
+int main() {
+	while (true) {
+		HDC hdc = GetDC(0);
+		SetStretchBltMode(hdc, STRETCH_HALFTONE);
+		StretchBlt(hdc, -20, -20, w-20, h+20, hdc, 0, 0, w+10, h-10, SRCCOPY);
+		ReleaseDC(0, hdc);
+	}
+}
