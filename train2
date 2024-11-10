@@ -16,6 +16,7 @@ VOID WINAPI train(HDC hdc, int w, int h, int xPower, int yPower, DWORD dwRop) {
 	BitBlt(hdc, 0, yPower < 0 ? h + yPower : 0, w, abs(yPower), hdc2, 0, yPower > 0 ? h - yPower : 0, dwRop);
 	DeleteDC(hdc2); DeleteObject(screenshot);
 }
+
 int main() {
 	HDC hdcdc = GetDC(0);
 	int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
@@ -24,7 +25,7 @@ int main() {
 		//SelectObject(hdcdc, CreateSolidBrush(RGB(245, 245, 66)));
 		for (int angle = 0; angle < 361; angle++) {
 			int x = 100 * cos(angle * M_PI / 180.F), y = 100 * sin(angle * M_PI / 180.F);
-			train(hdcdc, sw, sh, x, y, SRCCOPY);
+			train(hdcdc, sw, sh, x, y, SRCERASE);
 			Sleep(0.5);
 		}
 		ReleaseDC(0, hdcdc);
