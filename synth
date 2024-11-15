@@ -1,0 +1,19 @@
+#include <windows.h>
+#pragma comment(lib, "winmm.lib")
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#define M_PI 3.14159265358979323846264338327950288
+#pragma comment(lib, "msimg32.lib")
+
+int main()
+{
+    int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+	int x = 0, y = 0, s = screenH/2; double a = 0;
+    while (1) {
+    	HDC hdc = GetDC(0);
+        x+=5; y = s+(sin(a)*s/5*4); a += M_PI/40;
+    	BitBlt(hdc, x, y, 50, 50, hdc, 0, 0, BLACKNESS);
+    	BitBlt(hdc, screenW-x, screenH-y, 50, 50, hdc, 0, 0, WHITENESS);
+		if (x >= screenW) {a=0,y=s,x=5;} ReleaseDC(0, hdc);
+	}
+}
