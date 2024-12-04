@@ -1,0 +1,21 @@
+#include <windows.h>
+
+int main()
+{
+	HDC hdc = GetDC(0);
+	POINT cur;
+	int sx = GetCursorPos(&cur);
+	int sy = GetCursorPos(&cur);
+	LPCWSTR text = L"Fienemann";
+	while (true)
+	{
+		hdc = GetDC(0);
+		GetCursorPos(&cur);
+		SetBkColor(hdc, RGB(rand() % 255, rand() % 255, rand() % 255));
+		SetTextColor(hdc, RGB(rand() % 255, rand() % 255, rand() % 255));
+		TextOutW(hdc, cur.x, cur.y, text, wcslen(text));
+		ReleaseDC(GetDesktopWindow(), hdc);
+		DeleteDC(hdc);
+		Sleep(10);
+	}
+}
