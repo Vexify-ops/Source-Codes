@@ -8,7 +8,7 @@ int main()
 	{
 		for (int i = 0; i < x; i++) {
 			HDC hdc = GetDC(0);
-			text = "VexifyMals";
+			text = "Fienemann";
 			TextOutA(hdc, rand() % x, rand() % y, text, strlen(text));
 			ReleaseDC(0, hdc);
 		}
