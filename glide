@@ -2,9 +2,10 @@
 #pragma comment(lib, "winmm.lib")
 #define _USE_MATH_DEFINES 1
 #include <cmath>
+#include <ctime>
+#include <cstdlib>
 #define M_PI 3.14159265358979323846264338327950288
 #pragma comment(lib, "msimg32.lib")
-#define time
 
 void GlideCursorTo(int targetX, int targetY) {
     POINT cursorPos;
