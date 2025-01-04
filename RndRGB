@@ -10,7 +10,7 @@ int main()
 	while (1) {
 		HDC hdc = GetDC(NULL);
 		int w = GetSystemMetrics(SM_CXSCREEN),
-			h = GetSystemMetrics(SM_CYSCREEN);
+	        int h = GetSystemMetrics(SM_CYSCREEN);
 
 		HBRUSH brush = CreateSolidBrush(RndRGB()); //credits to N17Pro3426 for the RndRGB Function
 		SelectObject(hdc, brush);
