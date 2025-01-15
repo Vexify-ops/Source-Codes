@@ -1,0 +1,22 @@
+#include <windows.h>
+
+int main()
+{
+    HDC hdc;
+    int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+    HFONT hfnt;
+    while (true) {
+        hdc = GetDC(0);
+        CHAR username[256];
+        DWORD dwUserSize = sizeof(username);
+        GetUserNameA(username, &dwUserSize);
+        hfnt = CreateFontA(43, 32, rand() % 3600, rand() % 3600, FW_MEDIUM, false, false, false, ANSI_CHARSET, 0, 0, 0, 0, "Fredoka");
+        SelectObject(hdc, hfnt);
+        SetBkMode(hdc, 0);
+        SetTextColor(hdc, RGB(0, 0, rand() % 255));
+        TextOutA(hdc, rand() % w, rand() % h, username, strlen(username));
+        DeleteObject(hfnt);
+        ReleaseDC(0, hdc);
+        Sleep(10);
+    }
+}
