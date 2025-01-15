@@ -1,0 +1,28 @@
+#include <windows.h>
+
+COLORREF TripleRGB() {
+	int clr = rand() % 4;
+	if (clr == 0) return RGB(110, 0, 0); if (clr == 1) return RGB(0, 110, 0); if (clr == 2) return RGB(20, 10, 255); if (clr == 3) return RGB(1, 20, 30); if (clr == 4) return RGB(255, 255, 0);
+}
+
+int main()
+{
+	int w = GetSystemMetrics(SM_CXSCREEN);
+	int h = GetSystemMetrics(SM_CYSCREEN);
+	POINT cursor;
+	while (1)
+	{
+		HDC hdc = GetDC(0);
+		GetCursorPos(&cursor);
+		int top_x = 0 + cursor.x;
+		int top_y = 0 + cursor.y;
+		int bottom_x = 100 + cursor.x;
+		int bottom_y = 100 + cursor.y;
+		HBRUSH brush = CreateSolidBrush(TripleRGB());
+		SelectObject(hdc, brush);
+		Rectangle(hdc, top_x, top_y, bottom_x, bottom_y);
+		Sleep(10);
+		DeleteObject(brush);
+		ReleaseDC(0, hdc);
+	}
+}
