@@ -1,0 +1,48 @@
+#include <windows.h>
+
+int red, green, blue;
+bool ifcolorblue = false, ifblue = false;
+COLORREF GetUnknownColors(int length) {
+	if (red != length) {
+		red < length; red++;
+		if (ifblue == true) {
+			return RGB(red, 255, length);
+		}
+		else {
+			return RGB(red, 255, 255);
+		}
+	}
+	else {
+		if (green != length) {
+			green < length; green++;
+			return RGB(length, green, 255);
+		}
+		else {
+			if (blue != length) {
+				blue < length; blue++;
+				return RGB(255, length, blue);
+			}
+			else {
+				red = 255; green = 255; blue = 255;
+				ifblue = true;
+			}
+		}
+	}
+}
+
+int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
+
+int main()
+{
+	while (true) {
+		HDC hdc = GetDC(0);
+		HBRUSH hbsh = CreateSolidBrush(GetUnknownColors(300));
+		SelectObject(hdc, hbsh);
+		POINT cpt;
+		GetCursorPos(&cpt);
+		Pie(hdc, cpt.x + 50, cpt.y + 50, cpt.x - 50, cpt.y - 50, 30, 30, rand() % w, rand() % h);
+		DeleteObject(hbsh);
+		ReleaseDC(0, hdc);
+		Sleep(10);
+	}
+}
