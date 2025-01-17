@@ -1,0 +1,37 @@
+#include <windows.h>
+#include <winternl.h>
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+#pragma comment(lib, "winmm.lib")
+#define SRCBSH (DWORD)0x89345c
+DWORD xs;
+VOID SeedXorshift32(DWORD dwSeed) {
+	xs = dwSeed;
+}
+DWORD xorshift32() {
+	xs ^= xs << 13;
+	xs ^= xs << 17;
+	xs ^= xs << 5;
+	return xs;
+}
+
+int main() {
+	int sh = GetSystemMetrics(0), sw = GetSystemMetrics(1);
+	double moveangle = 0; CURSORINFO curinf;
+	for (int i = 0;; i++, i %= 20) {
+		GetCursorInfo(&curinf);
+		SeedXorshift32(__rdtsc());
+		HDC desk = GetDC(0);
+		int ax = (int)(fabsf(moveangle) * 3);
+		int ay = (int)(tan(moveangle) * 3);
+		SelectObject(desk, CreateSolidBrush(RGB(xorshift32() % 255, xorshift32() % 255, xorshift32() % 255)));
+		BitBlt(desk, ax, ay, sh, sw, desk, 0, 0, SRCBSH);
+		BitBlt(desk, ay, ax, sh, sw, desk, 0, 0, SRCBSH);
+		BitBlt(desk, -ax, -ay, sh, sw, desk, 0, 0, SRCBSH);
+		BitBlt(desk, -ay, -ax, sh, sw, desk, 0, 0, SRCBSH);
+		curinf.cbSize = sizeof(curinf);
+		DrawIcon(desk, xorshift32() % sw, xorshift32() % sh, curinf.hCursor);
+		moveangle = fmod(moveangle + M_PI / 16.f, M_PI * 2.f);
+		Sleep(10);
+	}
+}
