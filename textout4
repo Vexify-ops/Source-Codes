@@ -1,0 +1,55 @@
+#include <windows.h>
+
+int red, green, blue;
+bool ifcolorblue = false, ifblue = false;
+COLORREF Hue(int length) { //Credits to Void_/GetMBR
+	if (red != length) {
+		red < length; red++;
+		if (ifblue == true) {
+			return RGB(red, 0, length);
+		}
+		else {
+			return RGB(red, 0, 0);
+		}
+	}
+	else {
+		if (green != length) {
+			green < length; green++;
+			return RGB(length, green, 0);
+		}
+		else {
+			if (blue != length) {
+				blue < length; blue++;
+				return RGB(0, length, blue);
+			}
+			else {
+				red = 0; green = 0; blue = 0;
+				ifblue = true;
+			}
+		}
+	}
+}
+
+int main()
+{
+	int w = GetSystemMetrics(SM_CXSCREEN);
+	int h = GetSystemMetrics(SM_CYSCREEN);
+
+	POINT cpt;
+	LPCSTR text = 0;
+
+	while (1)
+	{
+		HDC hdc = GetDC(0);
+		GetCursorPos(&cpt);
+		SetBkMode(hdc, 0);
+		text = "Fienemann";
+		SetTextColor(hdc, Hue(239));
+		HFONT font = CreateFontA(43, 32, rand() % 360, 0, FW_THIN, 0, 0, 0, ANSI_CHARSET, 0, 0, 0, 0, "Fredoka");
+		SelectObject(hdc, font);
+		TextOutA(hdc, cpt.x, cpt.y, text, strlen(text));
+		DeleteObject(font);
+		Sleep(10);
+		ReleaseDC(0, hdc);
+	}
+}
